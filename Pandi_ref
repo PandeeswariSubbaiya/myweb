@@ -1,22 +1,12 @@
 pipeline{
     agent any
-    
-    environment{
-        PATH = "/opt/maven3/bin:$PATH"
-    }
-    stages{
+   stages{
         stage("Git Checkout"){
             steps{
                 git credentialsId: 'ec2-user', url: 'https://github.com/PandeeswariSubbaiya/myweb.git'
             }
         }
-        stage("Maven Build"){
-            steps{
-                sh "mvn clean package"
-                sh "mv target/*.war target/myweb.war"
-            }
-        }
-        stage("deploy-dev"){
+      stage("deploy-dev"){
             steps{
                 sshagent(['tomcat-new']) {
                 sh """
@@ -28,8 +18,6 @@ pipeline{
                 
                 """
             }
-            
-            }
-        }
+       }
     }
 }
